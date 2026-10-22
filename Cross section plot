@@ -1,0 +1,41 @@
+import numpy as np 
+import matplotlib.pyplot as plt 
+
+e = 1.6e-19             #fundamental electric charge
+m=  139.584139e6        #pion mass
+
+
+def C(theta):
+    c = np.cos(theta)
+    return c
+
+def Pc_m(s):                            # CoM momenta
+    P= 1/(2) * (s + 4*m**2)**(0.5)
+    return P
+
+def D(s, t):
+    d = 2*Pc_m(s) * t * s**(0.5) - s/4 - 2*Pc_m(s)**2 *t**2
+    return d - m 
+
+def sigma(s):                           #Cross secion for |cos| < 0.6
+    cross = e**4 * ((-15.925248 * Pc_m(s*10**(9))**4 * (s*10**(9))**(0.5))/(2**2)+(4.608 * Pc_m(s*10**(9))**(2))/(2) + 16/(2)) * (2**(0.5))/(16 * np.pi * (s*10**(9))**(1.5))
+    return cross
+
+s_values= np.arange(0.8,1.5, 0.001)    
+
+
+
+#this is very clearly wrong. Must include the dependence in the denominator. Will see if my differential cross section is any
+#good 
+
+def dsigma(s, T):
+    diff = e**4 * ((128 * Pc_m(s)**5 * T**5 - 32*Pc_m(s)**4 *T**4 * s**(0.5) )/(D(s, T)**2) + (8 * Pc_m(s)**2 * T**2 +16 )/(D(s, T)))* (2**(0.5))/(16 * np.pi * (s)**(1.5))
+    return diff 
+
+theta_values = np.arange(0, 1, 0.001)
+
+plt.figure()
+plt.plot(theta_values, dsigma(1.275, theta_values))
+plt.show() 
+
+#Sttaight line??????? 
